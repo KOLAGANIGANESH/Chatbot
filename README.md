@@ -65,3 +65,6 @@ Amigo/
 ## Environment Variables
 
 Fill in your `.env` file with actual Gemini and Groq API keys.
+
+<img width="1421" height="685" alt="Screenshot 2026-05-14 184304" src="https://github.com/user-attachments/assets/e4d09a68-cc0f-4570-a04b-2fa4b69026be" />
+<img width="1423" height="676" alt="Screenshot 2026-05-14 184329" src="https://github.com/user-attachments/assets/df8ad631-25b2-4703-a3cb-1b22922a4d62" />
