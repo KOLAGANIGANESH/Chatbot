@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatGPT UI Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p3xQ+i3fV9cN9m80/Ut7U/98SQKktPiVZQIgZml1uWz1OkZBfNkxWcr+6mBtsMx3yxpsG3TF6S9Rmpokd+W+8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      body {
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #f8fafc;
+      }
+      .sidebar-shadow {
+        box-shadow: 0 0 0 1px rgba(148,163,184,.12), 0 20px 45px -20px rgba(15,23,42,.18);
+      }
+      .chat-bubble {
+        word-break: break-word;
+      }
+      .scroll-smooth {
+        scroll-behavior: smooth;
+      }
+      .input-pill {
+        min-height: 52px;
+      }
+      .avatar-ring {
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen text-slate-900">
+    <div class="min-h-screen mx-auto max-w-[1600px] px-4 py-6 lg:px-8">
+      <div class="grid min-h-[calc(100vh-48px)] gap-5 lg:grid-cols-[290px_minmax(0,1fr)]">
+        <aside class="hidden lg:flex flex-col rounded-[28px] bg-white sidebar-shadow overflow-hidden">
+          <div class="flex items-center justify-between border-b border-slate-200 px-5 py-5">
+            <div class="flex items-center gap-3">
+              <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-white text-xl">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-slate-900">ChatGPT</p>
+                <p class="text-xs text-slate-500">Your AI companion</p>
+              </div>
+            </div>
+            <button id="newChatBtn" class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700">
+              <i class="fa-solid fa-plus text-[14px]"></i>
+              New chat
+            </button>
+          </div>
+
+          <div class="px-5 py-4">
+            <div class="relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input id="searchInput" type="search" placeholder="Search recents" class="w-full rounded-3xl border border-slate-200 bg-slate-50 px-12 py-3 text-sm text-slate-700 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200" />
+            </div>
+          </div>
+
+          <div class="flex-1 overflow-y-auto px-2 pb-4">
+            <div id="recentsList" class="space-y-2 px-3"></div>
+          </div>
+
+          <div class="border-t border-slate-200 px-5 py-5">
+            <div class="flex items-center gap-3 rounded-3xl bg-slate-50 p-4">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white avatar-ring">KO</div>
+              <div class="min-w-0">
+                <p class="text-sm font-semibold text-slate-900">kolagani</p>
+                <p class="text-[11px] uppercase tracking-[0.22em] text-slate-500">Free</p>
+              </div>
+            </div>
+            <button id="upgradeBtn" class="mt-4 inline-flex w-full items-center justify-center rounded-full bg-amber-500 px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-amber-400">Upgrade</button>
+          </div>
+        </aside>
+
+        <main class="flex min-h-[calc(100vh-48px)] flex-col overflow-hidden rounded-[28px] bg-white sidebar-shadow">
+          <div class="flex items-center justify-between gap-4 border-b border-slate-200 px-6 py-5">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Welcome back</p>
+              <h1 class="mt-2 text-2xl font-semibold text-slate-900">What are you working on?</h1>
+            </div>
+            <button class="hidden md:inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">
+              <i class="fa-solid fa-circle-plus text-base"></i> Get Plus
+            </button>
+          </div>
+
+          <section id="chatWindow" class="flex-1 overflow-y-auto px-6 py-6 scroll-smooth space-y-6">
+            <div class="mx-auto flex w-full max-w-3xl flex-col items-center justify-center rounded-[28px] border border-dashed border-slate-200 bg-slate-50 px-8 py-16 text-center">
+              <div class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-[20px] bg-slate-900 text-2xl text-white">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <h2 class="text-3xl font-semibold text-slate-900">What are you working on?</h2>
+              <p class="mt-3 max-w-xl text-sm leading-6 text-slate-500">Start a new conversation, ask anything, or continue with one of your recent sessions.</p>
+            </div>
+          </section>
+
+          <div class="border-t border-slate-200 px-6 py-4">
+            <form id="chatForm" class="flex items-center gap-3" autocomplete="off">
+              <button type="button" class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500 transition hover:border-slate-300 hover:bg-slate-100">
+                <i class="fa-solid fa-plus text-lg"></i>
+              </button>
+              <div class="relative flex-1">
+                <textarea id="messageInput" rows="1" placeholder="Ask anything" class="input-pill w-full resize-none rounded-full border border-slate-200 bg-slate-50 px-5 py-4 pr-32 text-sm leading-6 text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white focus:ring-2 focus:ring-slate-100"></textarea>
+                <div class="pointer-events-none absolute right-4 top-1/2 flex -translate-y-1/2 items-center gap-3 text-slate-400">
+                  <i class="fa-solid fa-microphone text-[18px]"></i>
+                  <i class="fa-solid fa-wave-square text-[18px]"></i>
+                </div>
+              </div>
+              <button type="submit" class="inline-flex h-12 items-center justify-center rounded-full bg-slate-900 px-6 text-sm font-semibold text-white transition hover:bg-slate-700">Send</button>
+            </form>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      const STORAGE_KEY = 'chatgptCloneState';
+      const API_URL = '/chat';
+      const recentsList = document.getElementById('recentsList');
+      const searchInput = document.getElementById('searchInput');
+      const chatWindow = document.getElementById('chatWindow');
+      const chatForm = document.getElementById('chatForm');
+      const messageInput = document.getElementById('messageInput');
+      const newChatBtn = document.getElementById('newChatBtn');
+      const upgradeBtn = document.getElementById('upgradeBtn');
+
+      let conversations = [];
+      let activeConversationId = null;
+      let isTyping = false;
+
+      function loadState() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+          if (saved && Array.isArray(saved.conversations)) {
+            conversations = saved.conversations;
+            activeConversationId = saved.activeConversationId || (conversations[0] && conversations[0].id) || null;
+            return;
+          }
+        } catch (error) {
+          console.warn('Unable to load saved state', error);
+        }
+        conversations = [];
+        activeConversationId = null;
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ conversations, activeConversationId }));
+      }
+
+      function getActiveConversation() {
+        return conversations.find((conversation) => conversation.id === activeConversationId) || null;
+      }
+
+      function getConversationTitle(messageText) {
+        if (!messageText) return 'New chat';
+        return messageText.length > 35 ? `${messageText.slice(0, 35).trim()}...` : messageText;
+      }
+
+      function createRecentItem(conversation) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'group flex w-full items-center justify-between gap-3 rounded-3xl border border-transparent px-4 py-4 text-left transition hover:border-slate-200 hover:bg-slate-50';
+        if (conversation.id === activeConversationId) {
+          button.classList.add('border-slate-300', 'bg-slate-100');
+        }
+
+        button.addEventListener('click', () => {
+          activeConversationId = conversation.id;
+          renderRecents();
+          renderChat();
+          saveState();
+        });
+
+        const title = conversation.title || 'New chat';
+        const preview = conversation.messages.length ? conversation.messages[conversation.messages.length - 1].text : 'Start the conversation';
+
+        button.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-white text-lg">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="truncate text-sm font-semibold text-slate-900">${title}</p>
+              <p class="mt-1 text-xs text-slate-500">${preview}</p>
+            </div>
+          </div>
+          <div class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition group-hover:bg-slate-200">
+            <i class="fa-solid fa-chevron-right text-[13px]"></i>
+          </div>
+        `;
+
+        return button;
+      }
+
+      function renderRecents() {
+        const query = searchInput.value.trim().toLowerCase();
+        const visibleConversations = conversations.filter((conversation) =>
+          conversation.title.toLowerCase().includes(query)
+        );
+
+        recentsList.innerHTML = '';
+
+        if (!visibleConversations.length) {
+          recentsList.innerHTML = '<p class="px-4 py-5 text-sm text-slate-500">No recent chats yet. Start a new one to save a conversation.</p>';
+          return;
+        }
+
+        visibleConversations.forEach((conversation) => {
+          recentsList.appendChild(createRecentItem(conversation));
+        });
+      }
+
+      function renderChat() {
+        const currentChat = getActiveConversation();
+        chatWindow.innerHTML = '';
+
+        if (!currentChat || !currentChat.messages.length) {
+          chatWindow.innerHTML = `
+            <div class="mx-auto flex w-full max-w-3xl flex-col items-center justify-center rounded-[28px] border border-dashed border-slate-200 bg-slate-50 px-8 py-16 text-center">
+              <div class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-[20px] bg-slate-900 text-2xl text-white">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <h2 class="text-3xl font-semibold text-slate-900">What are you working on?</h2>
+              <p class="mt-3 max-w-xl text-sm leading-6 text-slate-500">Ask your first question to connect with Gemini AI.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const thread = document.createElement('div');
+        thread.className = 'mx-auto flex w-full max-w-3xl flex-col gap-4';
+
+        currentChat.messages.forEach((message) => {
+          const bubble = document.createElement('div');
+          bubble.className = `chat-bubble max-w-[85%] rounded-[24px] px-5 py-4 text-sm leading-6 shadow-sm ${
+            message.role === 'user'
+              ? 'ml-auto rounded-br-[6px] rounded-tl-[24px] bg-slate-900 text-white'
+              : 'mr-auto rounded-bl-[6px] rounded-tr-[24px] bg-slate-100 text-slate-800'
+          }`;
+          bubble.innerHTML = `
+            <p>${message.text}</p>
+            <span class="mt-2 block text-[11px] text-slate-400">${message.role === 'user' ? 'You' : 'Kolagani'}</span>
+          `;
+          thread.appendChild(bubble);
+        });
+
+        chatWindow.appendChild(thread);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      }
+
+      function addTypingIndicator() {
+        const typing = document.createElement('div');
+        typing.id = 'typingIndicator';
+        typing.className = 'mr-auto flex max-w-[75%] items-center gap-3 rounded-[24px] bg-slate-100 px-5 py-4 text-slate-700 shadow-sm';
+        typing.innerHTML = `
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-200 text-slate-600">
+            <i class="fa-solid fa-robot"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Kolagani is typing...</p>
+            <div class="mt-2 flex items-center gap-1 text-[10px] uppercase tracking-[0.24em] text-slate-500">
+              <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse"></span>
+              <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse delay-150"></span>
+              <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse delay-300"></span>
+            </div>
+          </div>
+        `;
+        chatWindow.appendChild(typing);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      }
+
+      function removeTypingIndicator() {
+        const typing = document.getElementById('typingIndicator');
+        if (typing) typing.remove();
+      }
+
+      function getConversationByLocalId(localId) {
+        return conversations.find((conversation) => conversation.id === localId) || null;
+      }
+
+      function addConversation(localId, serverId, title, messages) {
+        const existing = getConversationByLocalId(localId);
+        if (existing) {
+          existing.conversationId = serverId;
+          existing.title = title || existing.title;
+          existing.messages = messages;
+          return existing;
+        }
+        const conversation = { id: localId, conversationId: serverId, title, messages };
+        conversations.unshift(conversation);
+        return conversation;
+      }
+
+      async function requestReply(message, conversationId) {
+        const payload = { message };
+        if (conversationId) {
+          payload.conversation_id = conversationId;
+        }
+
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          throw new Error(errorData?.detail || 'Unable to connect to the backend.');
+        }
+
+        return await response.json();
+      }
+
+      async function sendMessage() {
+        if (isTyping) return;
+        const text = messageInput.value.trim();
+        if (!text) return;
+
+        const currentChat = getActiveConversation();
+        if (!currentChat) {
+          createConversation();
+        }
+
+        const activeChat = getActiveConversation();
+        activeChat.messages.push({ role: 'user', text });
+        activeChat.title = activeChat.title === 'New chat' ? getConversationTitle(text) : activeChat.title;
+        renderRecents();
+        renderChat();
+        saveState();
+
+        messageInput.value = '';
+        isTyping = true;
+        addTypingIndicator();
+
+        try {
+          const payloadConversationId = activeChat.conversationId || null;
+          const data = await requestReply(text, payloadConversationId);
+          activeChat.conversationId = data.conversation_id;
+          activeChat.messages = data.messages.map((item) => ({ role: item.role, text: item.message }));
+          activeChat.title = getConversationTitle(data.messages.find((item) => item.role === 'user')?.message || activeChat.title);
+          renderRecents();
+          renderChat();
+          saveState();
+        } catch (error) {
+          removeTypingIndicator();
+          const activeChatError = getActiveConversation();
+          if (activeChatError) {
+            activeChatError.messages.push({ role: 'assistant', text: `Error: ${error.message}` });
+            renderChat();
+            saveState();
+          }
+        } finally {
+          isTyping = false;
+          removeTypingIndicator();
+        }
+      }
+
+      function createConversation() {
+        const localId = Date.now().toString();
+        const conversation = { id: localId, conversationId: null, title: 'New chat', messages: [] };
+        conversations.unshift(conversation);
+        activeConversationId = localId;
+        renderRecents();
+        renderChat();
+        saveState();
+      }
+
+      searchInput.addEventListener('input', renderRecents);
+
+      chatForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        sendMessage();
+      });
+
+      messageInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+          sendMessage();
+        }
+      });
+
+      newChatBtn.addEventListener('click', createConversation);
+      upgradeBtn.addEventListener('click', () => alert('Upgrade path coming soon!'));
+
+      window.addEventListener('load', () => {
+        loadState();
+        renderRecents();
+        renderChat();
+      });
+    </script>
+  </body>
+</html>

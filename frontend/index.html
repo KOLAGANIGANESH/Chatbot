@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Amigo AI</title>
+
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+
+  <div class="top-bar">
+    <div class="logo">
+      
+      <span class="text">Amigo AI</span>
+    </div>
+
+    <span class="material-icons toggle" onclick="toggleSidebar()">menu</span>
+  </div>
+
+  <div class="menu">
+    <div class="menu-item"><span class="material-icons">add</span><span class="text">New</span></div>
+    <div class="menu-item"><span class="material-icons">history</span><span class="text">History</span></div>
+    <div class="menu-item"><span class="material-icons">settings</span><span class="text">Settings</span></div>
+  </div>
+
+  <div class="user" onclick="toggleUserMenu(event)">
+    <span class="material-icons">account_circle</span>
+    <span class="text">User</span>
+  </div>
+
+  <div class="user-menu" id="userMenu">
+    <div>Profile</div>
+    <div>Settings</div>
+    <div>Help</div>
+    <div>Logout</div>
+  </div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- THEME -->
+  <div class="theme-btn" onclick="toggleTheme()">
+    <span class="material-icons">dark_mode</span>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"/>
+    <h1>Amigo AI</h1>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-area" id="chatArea"></div>
+
+  <!-- INPUT -->
+  <div class="input-wrapper center" id="inputWrapper">
+
+    <div class="input-box">
+
+      <!-- PLUS -->
+      <div class="plus" onclick="togglePlusMenu(event)">
+        <span class="material-icons">add</span>
+
+        <div class="plus-menu" id="plusMenu">
+          <div>Create Image</div>
+          <div>Web Search</div>
+          <div>Deep Search</div>
+          <div>Thinking</div>
+        </div>
+      </div>
+
+      <!-- INPUT -->
+      <input id="userInput" type="text" placeholder="Message Amigo AI..." />
+
+      <!-- RIGHT ICONS -->
+      <div class="right-icons">
+        <span class="material-icons icon-btn">mic</span>
+        <span class="material-icons icon-btn" onclick="sendMessage()">send</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
