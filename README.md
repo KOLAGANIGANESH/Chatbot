@@ -12,7 +12,8 @@ Amigo/
 │   ├── api_router.py
 │   ├── config.py
 │   └── requirements.txt
-├── frontend/            ← ChatGPT-style UI
+├── Chatapplication/
+├── frontend/            
 │   ├── index.html
 │   ├── style.css
 │   └── script.js
