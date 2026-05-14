@@ -1,4 +1,6 @@
 # Amigo Chatbot Project
+#**Chatapplication**
+**Chatapplication is a separate independent chatbot module with its own UI, logic, and optional API integration for standalone use.**
 
 A full-stack chatbot application with AI failover using Gemini and Groq.
 
@@ -12,7 +14,6 @@ Amigo/
 │   ├── api_router.py
 │   ├── config.py
 │   └── requirements.txt
-├── Chatapplication/
 ├── frontend/            
 │   ├── index.html
 │   ├── style.css
